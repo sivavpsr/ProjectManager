@@ -1,0 +1,70 @@
+<div class="row d-flex">
+  <div class="col-10">
+    <button type="button" class="btn btn-primary float-right" (click)="addTask()">Add Task</button>
+  </div>
+</div>
+<h4 class="page-header">View Tasks</h4>
+<div class="form-group row">
+  <label class="col-12 col-sm-2 control-label">Project:</label>
+  <div class="col-12 col-sm-4 input-group">
+    <input type="text" class="form-control" [(ngModel)]="Project" readonly />
+    <div class="input-group-append">
+      <span (click)="openProjectDialog()" class="input-group-text"><i class="fa fa-search"></i></span>
+    </div>
+  </div>
+</div>
+<div class="col-12 col-sm-8">
+  <label>Sort by:</label>
+  <button type="button" class="btn btn-link" (click)="sortBy('StartDate')">Start Date</button>
+  |<button type="button" class="btn btn-link" (click)="sortBy('EndDate')">End Date</button>
+  |<button type="button" class="btn btn-link" (click)="sortBy('Priority')">Priority</button>
+  |<button type="button" class="btn btn-link" (click)="sortBy('Completed')">Completed</button>
+</div>
+<br />
+<div class="list-group" *ngFor="let task of Tasks | filter: searchText : properties | orderby: field : order">
+  <div class="list-group-item">
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <div class="row">
+          <div class="col-12">
+            <div class="list-group-item-text">
+              <label>Task: </label> {{ task.TaskDescription }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="list-group-item-text">
+              <label>Parent Task: </label> {{ task.ParentTaskDescription }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Start Date: </label> {{ task.StartDate | date: "dd-MM-yyyy" }}
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>End Date: </label> {{ task.EndDate | date: "dd-MM-yyyy" }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Priority: </label> {{ task.Priority }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6">
+        <div *ngIf="!task.Completed">
+          <button class="btn btn-sm btn-primary" (click)="editTask(task.TaskId)">Edit</button>
+          | <button class="btn btn-sm btn-danger" (click)="completeTask(task.TaskId)">Complete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

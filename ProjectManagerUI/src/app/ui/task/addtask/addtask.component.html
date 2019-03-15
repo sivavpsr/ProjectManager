@@ -1,0 +1,90 @@
+<div class="page-header">{{ title }}</div>
+<br />
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">Project</label>
+    <div class="col-12 col-sm-4 input-group">
+      <input type="text" class="form-control" formControlName="Project" readonly [ngClass]="{ 'invalid': submitted && f.Project.errors }" />
+      <div class="input-group-append">
+        <span (click)="openProjectDialog()" class="input-group-text"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+    <div *ngIf="submitted && f.Project.errors" class="col-12 col-sm-4 text-danger small">
+      Project is required
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="task" class="col-12 col-sm-2 control-label">Task</label>
+    <div class="col-12 col-sm-4">
+      <input type="text" class="form-control" formControlName="Task" maxlength="40" [ngClass]="{ 'invalid': submitted && f.Task.errors }" />
+    </div>
+    <div *ngIf="submitted && f.Task.errors" class="col-12 col-sm-4 text-danger small">
+      Task is required
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">Is Parent Task</label>
+    <div class="col-12 col-sm-4">
+      <input type="checkbox" class="checkbox" formControlName="IsParentTask" (change)="onParentTaskChange()">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">Parent Task</label>
+    <div class="col-12 col-sm-4 input-group">
+      <input type="text" class="form-control" formControlName="ParentTask" readonly [ngClass]="{ 'invalid': submitted && f.ParentTask.errors }" />
+      <div class="input-group-append">
+        <span (click)="openParentTaskDialog()" class="input-group-text"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">Priority</label>
+    <div class="col-12 col-sm-4">
+      <input type="range" min="0" max="30" step="1" class="form-control" formControlName="Priority" />
+    </div>
+    <div *ngIf="submitted && priorityRequired" class="col-12 col-sm-4 text-danger small">
+      Priority is required
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">Start Date</label>
+    <div class="col-12 col-sm-4">
+      <input type="date" class="form-control" formControlName="StartDate">
+    </div>
+    <div *ngIf="submitted && startDateRequired" class="col-12 col-sm-4 text-danger small">
+      Start date is required
+    </div>
+    <div *ngIf="submitted && startDateGreater" class="col-12 col-sm-4 text-danger small">
+      Start date is greater than end date
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">End Date</label>
+    <div class="col-12 col-sm-4">
+      <input type="date" class="form-control" formControlName="EndDate">
+    </div>
+    <div *ngIf="submitted && endDateRequired" class="col-12 col-sm-4 text-danger small">
+      End date is required
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-12 col-sm-2 control-label">User</label>
+    <div class="col-12 col-sm-4 input-group">
+      <input type="text" class="form-control" formControlName="User" readonly [ngClass]="{ 'invalid': submitted && userRequired }" />
+      <div class="input-group-append">
+        <span (click)="openUserDialog()" class="input-group-text"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+    <div *ngIf="submitted && userRequired" class="col-12 col-sm-4 text-danger small">
+      User is required
+    </div>
+  </div>
+  <div class="button-row">
+    <button class="btn btn-success btn-sm">{{ buttonText }}</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="cancel()">Cancel</button>
+  </div>
+  <br />
+  <div class="form-group" *ngIf="submitted && !status">
+    <span class="text-danger small"> {{ error }} </span>
+  </div>
+</form>

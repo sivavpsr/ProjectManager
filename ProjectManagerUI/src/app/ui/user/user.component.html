@@ -1,0 +1,68 @@
+<div class="row d-flex">
+  <div class="col-10">
+    <button type="button" class="btn btn-primary float-right" [hidden]="actionClicked" (click)="addUser()">Add User</button>
+  </div>
+</div>
+<div [hidden]="!actionClicked">
+  <div class="page-header">{{ title }}</div>
+  <br />
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group row">
+      <label for="firstName" class="col-12 col-sm-2 control-label">First Name</label>
+      <div class="col-12 col-sm-4">
+        <input type="text" class="form-control" formControlName="FirstName" maxlength="40" [ngClass]="{ 'invalid': submitted && f.FirstName.errors }" />
+      </div>
+      <div *ngIf="submitted && f.FirstName.errors" class="col-12 col-sm-4 text-danger small">
+          First name is required
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="lastName" class="col-12 col-sm-2 control-label">Last Name</label>
+      <div class="col-12 col-sm-4">
+        <input type="text" class="form-control" formControlName="LastName" maxlength="40" [ngClass]="{ 'invalid': submitted && f.LastName.errors }" />
+      </div>      
+      <div *ngIf="submitted && f.LastName.errors" class="col-12 col-sm-4 text-danger small">
+          Last name is required
+      </div>
+    </div>
+    <div class="button-row">
+      <button class="btn btn-success btn-sm">{{ buttonText }}</button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="cancel()">Cancel</button>
+    </div>
+    <div class="form-group" *ngIf="submitted && !status">
+      <span class="text-danger small"> {{ error }} </span>
+    </div>
+  </form>
+  <br />
+</div>
+<h4>View User</h4>
+<div class="row">
+  <div class="col-12 col-sm-4">
+    <input class="form-control" type="text" [(ngModel)]="searchText" placeholder="Search...">
+  </div>
+  <div class="col-12 col-sm-8">
+    <label>Sort by:</label>
+    <button type="button" class="btn btn-link" (click)="sortBy('FirstName')">First Name</button>
+    |<button type="button" class="btn btn-link" (click)="sortBy('LastName')">Last Name</button>
+    |<button type="button" class="btn btn-link" (click)="sortBy('UserId')">User Id</button>
+  </div>
+</div>
+<br />
+<div class="list-group" *ngFor="let user of Users | filter: searchText | orderby: field : order ">
+  <div class="list-group-item">
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <div class="list-group-item-text">
+          <label>User Id: </label> {{ user.UserId }}</div>
+        <div class="list-group-item-text">
+          <label>First Name: </label> {{ user.FirstName }}</div>
+        <div class="list-group-item-text">
+          <label>Last Name: </label> {{ user.LastName }}</div>
+      </div>
+      <div class="col-12 col-sm-6">
+          <button class="btn btn-sm btn-primary" (click)="editUser(user.UserId)">Edit</button>
+          | <button class="btn btn-sm btn-danger" (click)="deleteUser(user.UserId)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

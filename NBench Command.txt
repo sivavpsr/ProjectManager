@@ -1,0 +1,1 @@
+"C:\Users\Admin\Documents\Visual Studio 2017\Projects\Final\ProjectManager\packages\NBench.Runner.1.2.2\tools\net452\NBench.Runner.exe" "C:\Users\Admin\Documents\Visual Studio 2017\Projects\Final\ProjectManager\ProjectManager.PerformanceTesting\bin\Debug\ProjectManager.PerformanceTesting.dll" output-directory="C:\Users\Admin\Documents\Visual Studio 2017\Projects\Final"

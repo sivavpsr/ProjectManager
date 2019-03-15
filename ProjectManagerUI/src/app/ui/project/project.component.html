@@ -1,0 +1,139 @@
+<div class="row d-flex">
+  <div class="col-10">
+    <button type="button" class="btn btn-primary float-right" [hidden]="actionClicked" (click)="addProject()">Add Project</button>
+  </div>
+</div>
+<div [hidden]="!actionClicked">
+  <div class="page-header">{{ title }}</div>
+  <br />
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <div class="form-group row">
+      <label for="projectDescription" class="col-12 col-sm-2 control-label">Project Description</label>
+      <div class="col-12 col-sm-4">
+        <input type="text" class="form-control" formControlName="ProjectDescription" maxlength="40" [ngClass]="{ 'invalid': submitted && f.ProjectDescription.errors }" />
+      </div>
+      <div *ngIf="submitted && f.ProjectDescription.errors" class="col-12 col-sm-4 text-danger small">
+        Project Description is required
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-12 col-sm-2 control-label">Manager</label>
+      <div class="col-12 col-sm-4 input-group">
+        <input type="text" class="form-control" formControlName="Manager" readonly [ngClass]="{ 'invalid': submitted && f.Manager.errors }" />
+        <div class="input-group-append">
+          <span (click)="openUserDialog()" class="input-group-text"><i class="fa fa-search"></i></span>
+        </div>
+      </div>
+      <div *ngIf="submitted && f.Manager.errors" class="col-12 col-sm-4 text-danger small">
+        Manager is required
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-12 col-sm-2 control-label">Priority</label>
+      <div class="col-12 col-sm-4">
+        <input type="range" min="0" max="30" step="1" class="form-control" formControlName="Priority" />
+      </div>
+      <div *ngIf="submitted && f.Priority.errors" class="col-12 col-sm-4 text-danger small">
+        Priority is required
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-12 col-sm-2 control-label">Set Start Date</label>
+      <div class="col-12 col-sm-4">
+        <input type="checkbox" class="checkbox" formControlName="DateRequired" (change)="toggleDate()">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-12 col-sm-2 control-label">Start Date</label>
+      <div class="col-12 col-sm-4">
+        <input type="date" class="form-control" formControlName="StartDate">
+      </div>
+      <div *ngIf="submitted && startDateRequired" class="col-12 col-sm-4 text-danger small">
+        Start date is required
+      </div>
+      <div *ngIf="submitted && startDateGreater" class="col-12 col-sm-4 text-danger small">
+        Start date is greater than end date
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-12 col-sm-2 control-label">End Date</label>
+      <div class="col-12 col-sm-4">
+        <input type="date" class="form-control" formControlName="EndDate">
+      </div>
+      <div *ngIf="submitted && endDateRequired" class="col-12 col-sm-4 text-danger small">
+        End date is required
+      </div>
+    </div>
+    <div class="button-row">
+      <button class="btn btn-success btn-sm">{{ buttonText }}</button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="cancel()">Cancel</button>
+    </div>
+    <br />
+    <div class="form-group" *ngIf="submitted && !status">
+      <span class="text-danger small"> {{ error }} </span>
+    </div>
+  </form>
+  <br />
+</div>
+<h4 class="page-header">View Projects</h4>
+<div class="row">
+  <div class="col-12 col-sm-4">
+    <input class="form-control" type="text" [(ngModel)]="searchText" placeholder="Search...">
+  </div>
+  <div class="col-12 col-sm-8">
+    <label>Sort by:</label>
+    <button type="button" class="btn btn-link" (click)="sortBy('StartDate')">Start Date</button>
+    |<button type="button" class="btn btn-link" (click)="sortBy('EndDate')">End Date</button>
+    |<button type="button" class="btn btn-link" (click)="sortBy('Priority')">Priority</button>
+    |<button type="button" class="btn btn-link" (click)="sortBy('CompletedTaskCount')">Completed</button>
+  </div>
+</div>
+<br />
+<div class="list-group" *ngFor="let proj of Projects | filter: searchText : properties | orderby: field : order">
+  <div class="list-group-item">
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Project: </label> {{ proj.ProjectDescription }}
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Priority: </label> {{ proj.Priority }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Start Date: </label> {{ proj.StartDate | date: "dd-MM-yyyy" }}
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>End Date: </label> {{ proj.EndDate | date: "dd-MM-yyyy" }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Task Count: </label> {{ proj.TaskCount }}
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="list-group-item-text">
+              <label>Completed Task Count: </label> {{ proj.CompletedTaskCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6">
+        <button class="btn btn-sm btn-primary" (click)="editProject(proj.ProjectId)">Edit</button>
+        | <button class="btn btn-sm btn-danger" (click)="suspendProject(proj.ProjectId)">Suspend</button>
+      </div>
+    </div>
+  </div>
+</div>
